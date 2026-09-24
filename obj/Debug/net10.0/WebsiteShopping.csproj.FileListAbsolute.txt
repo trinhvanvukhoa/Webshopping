@@ -1050,3 +1050,4 @@ D:/Webshopping-main/obj/Debug/net10.0/compressed/vvg34e90r6-{0}-c6re2preh7-c6re2
 /Users/trinhvanvukhoa/Documents/Project/ASPNET/Webshopping/obj/Debug/net10.0/ref/WebsiteShopping.dll
 /Users/trinhvanvukhoa/Documents/Project/ASPNET/Webshopping/obj/Debug/net10.0/compressed/56cbljjfx9-{0}-hp4ehfq5ye-hp4ehfq5ye.gz
 /Users/trinhvanvukhoa/Documents/Project/ASPNET/Webshopping/obj/Debug/net10.0/compressed/yr7h54vhdk-{0}-o4fzwh0add-o4fzwh0add.gz
+/Users/trinhvanvukhoa/Documents/Project/ASPNET/Webshopping/obj/Debug/net10.0/WebsiteShopping.sourcelink.json
