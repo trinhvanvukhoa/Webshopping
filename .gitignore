@@ -1,0 +1,44 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa]rtifacts/
+
+# Visual Studio / VS Code
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.rsuser
+*.code-workspace
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.nuget.cache
+
+# Generated files
+*.cache
+*.pdb
+*.dll
+*.exe
+*.log
+*.generated.cs
+*.g.cs
+*.g.i.cs
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Optional: ignore local environment config if you do not want to commit secrets
+# appsettings.Development.json
+# appsettings.Local.json
