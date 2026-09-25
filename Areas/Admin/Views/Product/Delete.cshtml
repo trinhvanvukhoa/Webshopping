@@ -1,0 +1,51 @@
+@model Product
+@{
+    ViewData["Title"] = "Xóa sản phẩm";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Xóa sản phẩm</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <i class="fa fa-trash-o fa-fw"></i> Xác nhận xóa
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="alert alert-warning">
+                    <i class="fa fa-exclamation-triangle fa-fw"></i>
+                    Bạn có chắc chắn muốn xóa sản phẩm này không?
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Mã</dt>
+                    <dd>@Model.ProductId</dd>
+                    <dt>Tên sản phẩm</dt>
+                    <dd><strong>@Model.ProductName</strong></dd>
+                    <dt>Danh mục</dt>
+                    <dd>@(Model.Category?.CategoryName)</dd>
+                    <dt>Giá</dt>
+                    <dd>@Model.Price.ToString("N0") đ</dd>
+                </dl>
+
+                <form asp-action="Delete" asp-route-id="@Model.ProductId" method="post">
+                    <input type="hidden" asp-for="ProductId" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa fa-trash-o fa-fw"></i> Xóa
+                    </button>
+                    <a asp-action="Index" class="btn btn-default">Quay lại</a>
+                </form>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-6 -->
+</div>
+<!-- /.row -->
