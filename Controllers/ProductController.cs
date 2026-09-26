@@ -1,174 +1,53 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using WebsiteShopping.Data;
-using WebsiteShopping.Models;
 
 namespace WebsiteShopping.Controllers
 {
-    [Area("Admin")]
+    /// <summary>
+    /// Storefront controller for customers (NO [Area]).
+    /// The admin part lives in Areas/Admin/Controllers/ProductController.cs
+    ///
+    /// Maps the 5 pages of the Karl template:
+    ///   /                          -> Index          (karl/index.html)
+    ///   /Product/Shop              -> Shop           (karl/shop.html)
+    ///   /Product/ProductDetails/5  -> ProductDetails (karl/product-details.html)
+    ///   /Product/Cart              -> Cart           (karl/cart.html)
+    ///   /Product/Checkout          -> Checkout       (karl/checkout.html)
+    ///
+    /// The views in Views/Product are currently static markup copied from the
+    /// Karl template, so the actions just render them. The database query code
+    /// is intentionally left out: add it back per action once the pages need
+    /// real data (Products / Categories via ApplicationDbContext).
+    /// </summary>
     public class ProductController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        private readonly IWebHostEnvironment _webHostEnvironment;
-
-        public ProductController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
+        // GET: /  - home page (karl/index.html)
+        public IActionResult Index()
         {
-            _db = db;
-            _webHostEnvironment = webHostEnvironment;
+            return View("index");
         }
 
-        // GET: Product
-        public async Task<IActionResult> Index()
+        // GET: Product/Shop - product listing
+        public IActionResult Shop()
         {
-            var products = await _db.Products
-                .Include(p => p.Category)
-                .OrderBy(p => p.ProductId)
-                .ToListAsync();
-
-            return View(products);
+            return View();
         }
 
-        // GET: Product/Create
-        public async Task<IActionResult> Create()
+        // GET: Product/ProductDetails/5
+        public IActionResult ProductDetails(int id)
         {
-            await FillCategoryList();
-            return View(new Product());
+            return View("product-details");
         }
 
-        // POST: Product/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Product product, IFormFile? image)
+        // GET: Product/Cart
+        public IActionResult Cart()
         {
-            await FillCategoryList();
-
-            if (ModelState.IsValid)
-            {
-                product.Image = await SaveImage(image);
-                _db.Products.Add(product);
-                await _db.SaveChangesAsync();
-                TempData["Success"] = "Thêm sản phẩm thành công!";
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(product);
+            return View();
         }
 
-        // GET: Product/Edit/5
-        public async Task<IActionResult> Edit(int id)
+        // GET: Product/Checkout
+        public IActionResult Checkout()
         {
-            var product = await _db.Products.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            await FillCategoryList();
-            return View(product);
-        }
-
-        // POST: Product/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Product product, IFormFile? image)
-        {
-            if (id != product.ProductId)
-            {
-                return NotFound();
-            }
-
-            await FillCategoryList();
-
-            if (ModelState.IsValid)
-            {
-                var oldProduct = await _db.Products.AsNoTracking().FirstOrDefaultAsync(p => p.ProductId == id);
-                if (oldProduct == null)
-                {
-                    return NotFound();
-                }
-
-                // Không chọn ảnh mới thì giữ nguyên ảnh cũ
-                var newImage = await SaveImage(image);
-                product.Image = string.IsNullOrEmpty(newImage) ? oldProduct.Image : newImage;
-
-                _db.Update(product);
-                await _db.SaveChangesAsync();
-                TempData["Success"] = "Cập nhật sản phẩm thành công!";
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(product);
-        }
-
-        // GET: Product/Delete/5
-        public async Task<IActionResult> Delete(int id)
-        {
-            var product = await _db.Products.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return View(product);
-        }
-
-        // POST: Product/Delete/5
-        [HttpPost]
-        [ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var product = await _db.Products.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            // Sản phẩm đã có trong đơn hàng thì không cho xóa
-            if (await _db.OrderDetails.AnyAsync(od => od.ProductId == id))
-            {
-                TempData["Error"] = "Sản phẩm đã có trong đơn hàng, không thể xóa!";
-                return RedirectToAction(nameof(Index));
-            }
-
-            _db.Products.Remove(product);
-            await _db.SaveChangesAsync();
-            TempData["Success"] = "Xóa sản phẩm thành công!";
-            return RedirectToAction(nameof(Index));
-        }
-
-        // Đổ danh mục vào ViewBag dùng cho thẻ <select>
-        private async Task FillCategoryList()
-        {
-            ViewBag.CategoryList = await _db.Categories
-                .OrderBy(c => c.CategoryName)
-                .Select(c => new SelectListItem
-                {
-                    Value = c.CategoryId.ToString(),
-                    Text = c.CategoryName
-                })
-                .ToListAsync();
-        }
-
-        // Lưu ảnh tải lên vào wwwroot/images, trả về đường dẫn tương đối
-        private async Task<string?> SaveImage(IFormFile? image)
-        {
-            if (image == null || image.Length == 0)
-            {
-                return null;
-            }
-
-            var folder = Path.Combine(_webHostEnvironment.WebRootPath ?? "wwwroot", "images");
-            Directory.CreateDirectory(folder);
-
-            var fileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
-            using (var stream = new FileStream(Path.Combine(folder, fileName), FileMode.Create))
-            {
-                await image.CopyToAsync(stream);
-            }
-
-            return "/images/" + fileName;
+            return View();
         }
     }
 }

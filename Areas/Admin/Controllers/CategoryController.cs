@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using WebsiteShopping.Data;
 using WebsiteShopping.Models;
 
-namespace WebsiteShopping.Controllers
+namespace WebsiteShopping.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class CategoryController : Controller
