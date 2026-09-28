@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebsiteShopping.Data;
+using WebsiteShopping.Models;
 
 namespace WebsiteShopping.Controllers
 {
@@ -44,11 +45,12 @@ namespace WebsiteShopping.Controllers
         // GET: Product/Shop?categoryId=3&search=dress - product listing, filtered
         public async Task<IActionResult> Shop(int? categoryId, string? search)
         {
-            var query = _db.Products.AsNoTracking().Include(p => p.Category);
+            IQueryable<Product> query = _db.Products.AsNoTracking().Include(p => p.Category);
 
-            if (categoryId.GetValueOrDefault() > 0)
+            if (categoryId is > 0)
             {
-                query = query.Where(p => p.CategoryId == categoryId.Value);
+                var catId = categoryId.Value;
+                query = query.Where(p => p.CategoryId == catId);
             }
 
             if (!string.IsNullOrWhiteSpace(search))
