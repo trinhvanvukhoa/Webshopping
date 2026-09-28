@@ -27,6 +27,15 @@ options.UseSqlServer(connectionString));
 // Thêm các service khác (Controllers, Swagger...)
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+// Cấu hình Authentication Cookie cho Admin
+builder.Services.AddAuthentication("AdminCookie")
+    .AddCookie("AdminCookie", options =>
+    {
+        options.LoginPath = "/Admin/Account/Login";
+        options.AccessDeniedPath = "/Admin/Account/Login";
+        options.ExpireTimeSpan = TimeSpan.FromHours(8);
+    });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

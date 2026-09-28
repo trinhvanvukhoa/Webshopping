@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebsiteShopping.Data;
@@ -6,6 +7,7 @@ using WebsiteShopping.Models;
 namespace WebsiteShopping.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(AuthenticationSchemes = "AdminCookie")]
     public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _db;
