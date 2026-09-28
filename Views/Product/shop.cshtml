@@ -1,4 +1,4 @@
-@{
+﻿﻿@{
     var products = ViewBag.Products as IEnumerable<Product> ?? Enumerable.Empty<Product>();
     var categories = ViewBag.Categories as IEnumerable<Category> ?? Enumerable.Empty<Category>();
     var currentCategoryId = ViewBag.CurrentCategoryId as int?;
@@ -110,7 +110,7 @@
                                                             </li>
                                                         </ul>
                                                     </li>
-                                                    @* Danh má»¥c láº¥y tá»« DB, danh má»¥c Ä‘ang lá»c Ä‘Æ°á»£c Ä‘Ã¡nh dáº¥u active *@
+                                                    @* Categories taken from DB, the category being filtered is marked as active *@
                                                     @foreach (var cat in categories)
                                                     {
                                                         var target = $"shop-cat-{cat.CategoryId}";
@@ -187,7 +187,7 @@
                                                     <img src="img/product-img/product-10.jpg" alt="">
                                                 </div>
                                                 <div class="single-recommended-desc">
-                                                    <h6>Menâ€™s T-shirt</h6>
+                                                    <h6>Men's T-shirt</h6>
                                                     <p>$ 39.99</p>
                                                 </div>
                                             </div>
@@ -207,7 +207,7 @@
                                                     <img src="img/product-img/product-12.jpg" alt="">
                                                 </div>
                                                 <div class="single-recommended-desc">
-                                                    <h6>Womenâ€™s T-shirt</h6>
+                                                    <h6>Women's T-shirt</h6>
                                                     <p>$ 39.99</p>
                                                 </div>
                                             </div>
@@ -250,7 +250,11 @@
                 <h4 class="product-price">$@ProductViewHelper.Price(item.Price)</h4>
                 <p><a href="@detailsUrl">@item.ProductName</a></p>
                 <!-- Add to Cart -->
-                <a asp-controller="Product" asp-action="Cart" asp-route-id="@item.ProductId" class="add-to-cart-btn">ADD TO CART</a>
+                <form asp-controller="Product" asp-action="AddToCart" method="post" class="d-inline">
+                    <input type="hidden" name="productId" value="@item.ProductId" />
+                    <input type="hidden" name="quantity" value="1" />
+                    <button type="submit" class="add-to-cart-btn btn btn-link border-0 p-0">ADD TO CART</button>
+                </form>
             </div>
         </div>
         productIndex++;

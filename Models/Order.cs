@@ -44,5 +44,8 @@ namespace WebsiteShopping.Models
         [StringLength(50, ErrorMessage = "Trạng thái không được vượt quá 50 ký tự")]
         [Display(Name = "Trạng thái đơn hàng")]
         public string Status { get; set; } = "Chờ xử lý";
+
+        // Navigation property - danh sách chi tiết đơn hàng
+        public ICollection<OrderDetail>? OrderDetails { get; set; }
     }
 }

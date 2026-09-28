@@ -136,7 +136,8 @@
     }
 
     // :: 7.0 Header Cart btn Active Code
-    $('#header-cart-btn').on('click', function () {
+    $('#header-cart-btn').on('click', function (e) {
+        e.preventDefault();
         $('body').toggleClass('cart-data-open');
     })
 

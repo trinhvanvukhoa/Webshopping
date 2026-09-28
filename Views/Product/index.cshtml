@@ -223,8 +223,11 @@
                                                         <h4 class="product-price">$@item.Price.ToString("N2")</h4>
                                                         <p><a href="@detailsUrl">@item.ProductName</a></p>
                                                         <!-- Add to Cart -->
-                                                        <a asp-controller="Product" asp-action="Cart" asp-route-id="@item.ProductId"
-                                                           class="add-to-cart-btn">ADD TO CART</a>
+                                                        <form asp-controller="Product" asp-action="AddToCart" method="post" class="d-inline">
+                                                            <input type="hidden" name="productId" value="@item.ProductId" />
+                                                            <input type="hidden" name="quantity" value="1" />
+                                                            <button type="submit" class="add-to-cart-btn btn btn-link border-0 p-0">ADD TO CART</button>
+                                                        </form>
                                                     </div>
                                                 </div>
                                                 productIndex++;

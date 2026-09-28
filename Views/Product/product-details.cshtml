@@ -81,7 +81,8 @@
                     </div>
 
                     <!-- Add to Cart Form -->
-                    <form class="cart clearfix mb-50 d-flex" method="post">
+                    <form asp-controller="Product" asp-action="AddToCart" method="post" class="cart clearfix mb-50 d-flex">
+                        <input type="hidden" name="productId" value="@product.ProductId" />
                         <div class="quantity">
                             <span class="qty-minus"
                                   onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i
@@ -92,8 +93,7 @@
                                       onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i
                                     class="fa fa-plus" aria-hidden="true"></i></span>
                                 </div>
-                                <button type="submit" name="addtocart" value="@product.ProductId" class="btn cart-submit d-block">Add to
-                                    cart</button>
+                                <button type="submit" class="btn cart-submit d-block">Add to cart</button>
                                 </form>
 
                                 <div id="accordion" role="tablist">
@@ -182,7 +182,7 @@
                                                 <div class="product-description">
                                                     <h4 class="product-price">$@ProductViewHelper.Price(item.Price)</h4>
                                                     <p><a href="@relUrl">@item.ProductName</a></p>
-                                                    <a asp-controller="Product" asp-action="Cart" asp-route-id="@item.ProductId" class="add-to-cart-btn">ADD TO CART</a>
+                                                    <a asp-controller="Product" asp-action="AddToCart" asp-route-productId="@item.ProductId" asp-route-quantity="1" class="add-to-cart-btn">ADD TO CART</a>
                                                 </div>
                                             </div>
                                         </div>

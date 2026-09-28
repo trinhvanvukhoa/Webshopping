@@ -36,6 +36,15 @@ builder.Services.AddAuthentication("AdminCookie")
         options.AccessDeniedPath = "/Admin/Account/Login";
         options.ExpireTimeSpan = TimeSpan.FromHours(8);
     });
+
+// Cấu hình Session cho Giỏ hàng
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -48,6 +57,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 
