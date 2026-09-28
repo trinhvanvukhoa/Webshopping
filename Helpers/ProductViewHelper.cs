@@ -64,6 +64,16 @@ namespace WebsiteShopping.Helpers
             return url.Content(path.StartsWith("~/") ? path : "~/" + path.TrimStart('/')) ?? path;
         }
 
+        /// <summary>
+        /// DB có thể lưu nhiều ảnh cách nhau bởi dấu phẩy.
+        /// Lấy ảnh đầu tiên làm ảnh chính.
+        /// </summary>
+        public static string? GetFirstImage(string? image)
+        {
+            if (string.IsNullOrWhiteSpace(image)) return null;
+            return image.Split(',').FirstOrDefault()?.Trim();
+        }
+
         /// <summary>Định dạng giá 2 chữ số, khớp kiểu hiển thị của template Karl.</summary>
         public static string Price(decimal value) => value.ToString("N2");
     }
