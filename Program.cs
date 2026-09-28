@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WebsiteShopping.Data;
+using WebsiteShopping.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,5 +82,22 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Product}/{action=Index}/{id?}");
+
+// Seed admin user if not exists
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    if (!db.Users.Any())
+    {
+        db.Users.Add(new User
+        {
+            Username = "admin",
+            Password = "admin123",
+            FullName = "Administrator",
+            Role = "Admin"
+        });
+        db.SaveChanges();
+    }
+}
 
 app.Run();
