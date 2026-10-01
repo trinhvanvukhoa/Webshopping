@@ -160,6 +160,11 @@
                             <i class="fa fa-cube fa-fw"></i> Products
                         </a>
                     </li>
+                    <li class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Order" ? "active" : "")">
+                        <a asp-area="Admin" asp-controller="Order" asp-action="Index">
+                            <i class="fa fa-shopping-cart fa-fw"></i> Orders
+                        </a>
+                    </li>
                     <li>
                         <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
