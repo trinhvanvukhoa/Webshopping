@@ -1,0 +1,33 @@
+@model WebsiteShopping.Models.Category
+@{
+    ViewData["Title"] = "Xóa danh mục";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Xóa danh mục</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="panel panel-danger">
+            <div class="panel-heading">Xác nhận xóa</div>
+            <div class="panel-body">
+                <p class="alert alert-warning">Bạn có chắc chắn muốn xóa danh mục này không?</p>
+                <dl class="dl-horizontal">
+                    <dt>Mã</dt>
+                    <dd>@Model.CategoryId</dd>
+                    <dt>Tên danh mục</dt>
+                    <dd>@Model.CategoryName</dd>
+                    <dt>Trạng thái</dt>
+                    <dd>@Model.Status</dd>
+                </dl>
+                <form asp-action="Delete" asp-route-id="@Model.CategoryId" method="post">
+                    <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Xóa</button>
+                    <a asp-action="Index" class="btn btn-default">Hủy</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

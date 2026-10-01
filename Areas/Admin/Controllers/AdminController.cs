@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebsiteShopping.Controllers
 {
+    [Area("Admin")]
+    [Authorize(AuthenticationSchemes = "AdminCookie")]
     public class AdminController : Controller
     {
         public IActionResult Index()

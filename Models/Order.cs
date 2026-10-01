@@ -46,6 +46,6 @@ namespace WebsiteShopping.Models
         public string Status { get; set; } = "Chờ xử lý";
 
         // Navigation property - danh sách chi tiết đơn hàng
-        public ICollection<OrderDetail>? OrderDetails { get; set; }
+        public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     }
 }
