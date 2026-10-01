@@ -6,17 +6,6 @@ using WebsiteShopping.Models;
 
 namespace WebsiteShopping.Controllers
 {
-    /// <summary>
-    /// Storefront controller for customers (NO [Area]).
-    /// The admin part lives in Areas/Admin/Controllers/ProductController.cs
-    ///
-    /// Maps the 5 pages of the Karl template:
-    ///   /                          -> Index          (karl/index.html)
-    ///   /Product/Shop              -> Shop           (karl/shop.html)
-    ///   /Product/ProductDetails/5  -> ProductDetails (karl/product-details.html)
-    ///   /Product/Cart              -> Cart           (karl/cart.html)
-    ///   /Product/Checkout          -> Checkout       (karl/checkout.html)
-    /// </summary>
     public class ProductController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -27,24 +16,17 @@ namespace WebsiteShopping.Controllers
             _db = db;
         }
 
-        // GET: /  - home page (karl/index.html)
         public async Task<IActionResult> Index()
         {
             ViewBag.Categories = await LoadCategoriesAsync();
-
-            // Newest products first, with the category loaded for the Isotope filter class.
             ViewBag.Products = await _db.Products
                 .AsNoTracking()
                 .Include(p => p.Category)
                 .OrderByDescending(p => p.ProductId)
                 .ToListAsync();
-
-            // The view file is named "index.cshtml" (lowercase) - name it explicitly
-            // so it does not depend on the OS being case sensitive.
             return View("index");
         }
 
-        // GET: Product/Shop?categoryId=3&search=dress - product listing, filtered
         public async Task<IActionResult> Shop(int? categoryId, string? search)
         {
             IQueryable<Product> query = _db.Products.AsNoTracking().Include(p => p.Category);
@@ -69,11 +51,8 @@ namespace WebsiteShopping.Controllers
             return View();
         }
 
-        // GET: Product/ProductDetails/5
         public async Task<IActionResult> ProductDetails(int id)
         {
-            // The header menu passes no id -> send the customer to the shop page
-            // instead of returning 404.
             if (id <= 0)
             {
                 return RedirectToAction(nameof(Shop));
@@ -92,30 +71,22 @@ namespace WebsiteShopping.Controllers
             ViewBag.Product = product;
             ViewBag.Categories = await LoadCategoriesAsync();
 
-            // Related products: same category, excluding the current one.
             ViewBag.RelatedProducts = await _db.Products
                 .AsNoTracking()
                 .Where(p => p.CategoryId == product.CategoryId && p.ProductId != product.ProductId)
                 .OrderBy(p => p.ProductId)
                 .Take(8)
                 .ToListAsync();
-
-            // The view file is named "product-details.cshtml" (contains a dash) so the
-            // view name must be specified explicitly.
             return View("product-details");
         }
 
-        // ==================== GIỎ HÀNG (CART) ====================
-
-        // GET: Product/Cart - Hiển thị giỏ hàng
         public IActionResult Cart()
         {
             var cart = GetCart();
-            ViewBag.CartCount = GetCartCount();
+            ViewBag.CartCount = GetCartItemCount();
             return View(cart);
         }
 
-        // GET/POST: Product/AddToCart - Thêm sản phẩm vào giỏ hàng
         [AcceptVerbs("GET", "POST")]
         public IActionResult AddToCart(int productId, int quantity = 1)
         {
@@ -151,27 +122,9 @@ namespace WebsiteShopping.Controllers
             // Nếu là AJAX request, trả về JSON
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                return Json(new { success = true, cartCount = GetCartCount(), cartTotal = cart.Sum(c => c.Total) });
+                return Json(new { success = true, cartCount = GetCartItemCount(), cartTotal = cart.Sum(c => c.Total) });
             }
-
-            // Quay lại trang trước đó (giữ nguyên trang khi thêm sản phẩm)
-            // Nếu không có Referer (ví dụ mở trực tiếp URL), fallback về trang shop.
             return Redirect(GetSafeRedirectUrl(nameof(Shop)));
-        }
-
-        // GET: Product/GetCartCount - Lấy số lượng sản phẩm trong giỏ (cho AJAX)
-        [HttpGet]
-        public IActionResult GetCartCount()
-        {
-            return Json(new { cartCount = GetCartItemCount(), cartTotal = GetCart().Sum(c => c.Total) });
-        }
-
-        // GET: Product/DebugCart - Debug session cart
-        [HttpGet]
-        public IActionResult DebugCart()
-        {
-            var cart = GetCart();
-            return Json(new { cartCount = cart.Count, items = cart.Select(c => new { c.ProductId, c.ProductName, c.Quantity, c.Price }) });
         }
 
         // POST: Product/UpdateCart - Cập nhật số lượng (form duy nhất cho toàn bộ giỏ)
@@ -234,23 +187,6 @@ namespace WebsiteShopping.Controllers
         {
             HttpContext.Session.Remove(CartSessionKey);
             return RedirectToAction(nameof(Cart));
-        }
-
-        // GET: Product/RemoveFromCartHeader - Xóa sản phẩm từ header dropdown
-        [HttpGet]
-        public IActionResult RemoveFromCartHeader(int productId)
-        {
-            var cart = GetCart();
-            var item = cart.FirstOrDefault(c => c.ProductId == productId);
-
-            if (item != null)
-            {
-                cart.Remove(item);
-                SaveCart(cart);
-            }
-
-            var referer = Request.Headers.Referer.ToString();
-            return Redirect(string.IsNullOrWhiteSpace(referer) ? Url.Action(nameof(Cart), "Product") ?? "/Product/Cart" : referer);
         }
 
         // GET: Product/Checkout - Hiển thị form checkout
@@ -344,11 +280,6 @@ namespace WebsiteShopping.Controllers
             return View(order);
         }
 
-        // ==================== PRIVATE METHODS ====================
-
-        /// <summary>
-        /// Lấy giỏ hàng từ session
-        /// </summary>
         private List<CartItem> GetCart()
         {
             var json = HttpContext.Session.GetString(CartSessionKey);
@@ -358,18 +289,12 @@ namespace WebsiteShopping.Controllers
             return JsonSerializer.Deserialize<List<CartItem>>(json) ?? new List<CartItem>();
         }
 
-        /// <summary>
-        /// Lưu giỏ hàng vào session
-        /// </summary>
         private void SaveCart(List<CartItem> cart)
         {
             var json = JsonSerializer.Serialize(cart);
             HttpContext.Session.SetString(CartSessionKey, json);
         }
 
-        /// <summary>
-        /// Trả về Referer an toàn, tránh lỗi khi request mở trực tiếp từ URL không có lịch sử trình duyệt.
-        /// </summary>
         private string GetSafeRedirectUrl(string fallbackAction)
         {
             var referer = Request.Headers.Referer.ToString();
@@ -382,18 +307,11 @@ namespace WebsiteShopping.Controllers
             return !string.IsNullOrWhiteSpace(fallbackUrl) ? fallbackUrl : "/Product/Shop";
         }
 
-        /// <summary>
-        /// Lấy tổng số lượng sản phẩm trong giỏ
-        /// </summary>
         private int GetCartItemCount()
         {
             return GetCart().Sum(c => c.Quantity);
         }
-
-        /// <summary>
-        /// Danh mục đang hoạt động, dùng cho sidebar và bộ lọc của trang chủ / shop.
-        /// Nếu DB lưu trạng thái bằng giá trị khác "Active" thì lấy tất cả.
-        /// </summary>
+        
         private async Task<List<Category>> LoadCategoriesAsync()
         {
             var categories = await _db.Categories

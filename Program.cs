@@ -61,6 +61,7 @@ app.UseRouting();
 
 app.UseSession();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
@@ -71,7 +72,7 @@ app.MapControllerRoute(
     defaults: new
     {
         area = "Admin",
-        controller = "Dashboard",
+        controller = "Admin",
         action = "Index"
     });
 
