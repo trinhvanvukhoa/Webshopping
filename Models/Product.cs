@@ -10,30 +10,30 @@ namespace WebsiteShopping.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProductId { get; set; }
 
-        [Required(ErrorMessage = "Vui lòng chọn danh mục")]
+        [Required(ErrorMessage = "Please select a category.")]
         public int CategoryId { get; set; }
 
         [ForeignKey("CategoryId")]
         public Category? Category { get; set; }
 
-        [Required(ErrorMessage = "Vui lòng nhập tên sản phẩm")]
-        [StringLength(200, ErrorMessage = "Tên sản phẩm không được vượt quá 200 ký tự")]
-        [Display(Name = "Tên sản phẩm")]
+        [Required(ErrorMessage = "Please enter a product name.")]
+        [StringLength(200, ErrorMessage = "Product name cannot exceed 200 characters.")]
+        [Display(Name = "Product Name")]
         public string ProductName { get; set; } = string.Empty;
 
         
-        [Required(ErrorMessage = "Vui lòng nhập giá sản phẩm")]
-        [Range(0.01, 99999999999999.99, ErrorMessage = "Giá sản phẩm phải lớn hơn 0")]
+        [Required(ErrorMessage = "Please enter a price.")]
+        [Range(0.01, 99999999999999.99, ErrorMessage = "Price must be greater than zero.")]
         [Column(TypeName = "decimal(18,2)")]
-        [Display(Name = "Giá sản phẩm")]
+        [Display(Name = "Price")]
         public decimal Price { get; set; }
 
-        [StringLength(250, ErrorMessage = "Đường dẫn hình ảnh không được vượt quá 250 ký tự")]
-        [Display(Name = "Hình ảnh")]
+        [StringLength(250, ErrorMessage = "Image path cannot exceed 250 characters.")]
+        [Display(Name = "Image")]
         public string? Image { get; set; }
 
         [Column(TypeName = "nvarchar(max)")]
-        [Display(Name = "Mô tả sản phẩm")]
+        [Display(Name = "Description")]
         public string? Description { get; set; }
     }
 }

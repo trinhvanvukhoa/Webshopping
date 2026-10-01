@@ -39,7 +39,7 @@ namespace WebsiteShopping.Areas.Admin.Controllers
             {
                 _db.Categories.Add(category);
                 await _db.SaveChangesAsync();
-                TempData["Success"] = "Thêm danh mục thành công!";
+                TempData["Success"] = "Category created successfully.";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -72,7 +72,7 @@ namespace WebsiteShopping.Areas.Admin.Controllers
             {
                 _db.Update(category);
                 await _db.SaveChangesAsync();
-                TempData["Success"] = "Cập nhật danh mục thành công!";
+                TempData["Success"] = "Category updated successfully.";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -106,13 +106,13 @@ namespace WebsiteShopping.Areas.Admin.Controllers
             // Danh mục còn sản phẩm thì không cho xóa
             if (await _db.Products.AnyAsync(p => p.CategoryId == id))
             {
-                TempData["Error"] = "Danh mục đang có sản phẩm, không thể xóa!";
+                TempData["Error"] = "This category contains products and cannot be deleted.";
                 return RedirectToAction(nameof(Index));
             }
 
             _db.Categories.Remove(category);
             await _db.SaveChangesAsync();
-            TempData["Success"] = "Xóa danh mục thành công!";
+            TempData["Success"] = "Category deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
     }

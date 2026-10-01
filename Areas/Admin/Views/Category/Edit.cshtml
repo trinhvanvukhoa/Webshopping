@@ -1,42 +1,42 @@
 @model WebsiteShopping.Models.Category
 @{
-    ViewData["Title"] = "Sửa danh mục";
+    ViewData["Title"] = "Edit Category";
 }
 
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Sửa danh mục</h1>
+        <h1 class="page-header">Edit Category</h1>
     </div>
 </div>
 
 <div class="row">
     <div class="col-lg-8">
         <div class="panel panel-default">
-            <div class="panel-heading">Cập nhật danh mục</div>
+            <div class="panel-heading">Update Category</div>
             <div class="panel-body">
                 <form asp-action="Edit" asp-route-id="@Model.CategoryId" method="post">
                     <input type="hidden" asp-for="CategoryId" />
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="CategoryName">Tên danh mục</label>
+                        <label asp-for="CategoryName">Category Name</label>
                         <input asp-for="CategoryName" class="form-control" />
                         <span asp-validation-for="CategoryName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Description">Mô tả</label>
+                        <label asp-for="Description">Description</label>
                         <textarea asp-for="Description" class="form-control" rows="4"></textarea>
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Status">Trạng thái</label>
+                        <label asp-for="Status">Status</label>
                         <select asp-for="Status" class="form-control">
-                            <option value="Hiển thị">Hiển thị</option>
-                            <option value="Ẩn">Ẩn</option>
+                            <option value="Hiển thị">Visible</option>
+                            <option value="Ẩn">Hidden</option>
                         </select>
                         <span asp-validation-for="Status" class="text-danger"></span>
                     </div>
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Cập nhật</button>
-                    <a asp-action="Index" class="btn btn-default">Quay lại</a>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Update</button>
+                    <a asp-action="Index" class="btn btn-default">Back</a>
                 </form>
             </div>
         </div>

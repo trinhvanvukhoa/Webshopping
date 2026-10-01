@@ -12,20 +12,20 @@ namespace WebsiteShopping.Models
         public int CategoryId { get; set; }
 
         // Tên danh mục
-        [Required(ErrorMessage = "Vui lòng nhập tên danh mục")]
-        [StringLength(100, ErrorMessage = "Tên danh mục không được vượt quá 100 ký tự")]
-        [Display(Name = "Tên danh mục")]
+        [Required(ErrorMessage = "Please enter a category name.")]
+        [StringLength(100, ErrorMessage = "Category name cannot exceed 100 characters.")]
+        [Display(Name = "Category Name")]
         public string CategoryName { get; set; } = string.Empty;
 
         // Mô tả danh mục
         [Column(TypeName = "nvarchar(max)")]
-        [Display(Name = "Mô tả")]
+        [Display(Name = "Description")]
         public string? Description { get; set; }
 
         // Trạng thái danh mục
-        [Required(ErrorMessage = "Vui lòng chọn trạng thái")]
-        [StringLength(50, ErrorMessage = "Trạng thái không được vượt quá 50 ký tự")]
-        [Display(Name = "Trạng thái")]
+        [Required(ErrorMessage = "Please select a status.")]
+        [StringLength(50, ErrorMessage = "Status cannot exceed 50 characters.")]
+        [Display(Name = "Status")]
         public string Status { get; set; } = string.Empty;
     }
 }

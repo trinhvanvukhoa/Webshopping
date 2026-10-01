@@ -50,7 +50,7 @@ namespace WebsiteShopping.Areas.Admin.Controllers
                 product.Image = await SaveImage(image);
                 _db.Products.Add(product);
                 await _db.SaveChangesAsync();
-                TempData["Success"] = "Thêm sản phẩm thành công!";
+                TempData["Success"] = "Product created successfully.";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -96,7 +96,7 @@ namespace WebsiteShopping.Areas.Admin.Controllers
 
                 _db.Update(product);
                 await _db.SaveChangesAsync();
-                TempData["Success"] = "Cập nhật sản phẩm thành công!";
+                TempData["Success"] = "Product updated successfully.";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -130,13 +130,13 @@ namespace WebsiteShopping.Areas.Admin.Controllers
             // Sản phẩm đã có trong đơn hàng thì không cho xóa
             if (await _db.OrderDetails.AnyAsync(od => od.ProductId == id))
             {
-                TempData["Error"] = "Sản phẩm đã có trong đơn hàng, không thể xóa!";
+                TempData["Error"] = "This product is included in an order and cannot be deleted.";
                 return RedirectToAction(nameof(Index));
             }
 
             _db.Products.Remove(product);
             await _db.SaveChangesAsync();
-            TempData["Success"] = "Xóa sản phẩm thành công!";
+            TempData["Success"] = "Product deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
 

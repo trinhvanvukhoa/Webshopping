@@ -1,31 +1,31 @@
 @model WebsiteShopping.Models.Category
 @{
-    ViewData["Title"] = "Xóa danh mục";
+    ViewData["Title"] = "Delete Category";
 }
 
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Xóa danh mục</h1>
+        <h1 class="page-header">Delete Category</h1>
     </div>
 </div>
 
 <div class="row">
     <div class="col-lg-6">
         <div class="panel panel-danger">
-            <div class="panel-heading">Xác nhận xóa</div>
+            <div class="panel-heading">Confirm Deletion</div>
             <div class="panel-body">
-                <p class="alert alert-warning">Bạn có chắc chắn muốn xóa danh mục này không?</p>
+                <p class="alert alert-warning">Are you sure you want to delete this category?</p>
                 <dl class="dl-horizontal">
-                    <dt>Mã</dt>
+                    <dt>ID</dt>
                     <dd>@Model.CategoryId</dd>
-                    <dt>Tên danh mục</dt>
+                    <dt>Category Name</dt>
                     <dd>@Model.CategoryName</dd>
-                    <dt>Trạng thái</dt>
-                    <dd>@Model.Status</dd>
+                    <dt>Status</dt>
+                    <dd>@(Model.Status == "Hiển thị" ? "Visible" : Model.Status == "Ẩn" ? "Hidden" : Model.Status)</dd>
                 </dl>
                 <form asp-action="Delete" asp-route-id="@Model.CategoryId" method="post">
-                    <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Xóa</button>
-                    <a asp-action="Index" class="btn btn-default">Hủy</a>
+                    <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                    <a asp-action="Index" class="btn btn-default">Cancel</a>
                 </form>
             </div>
         </div>

@@ -53,7 +53,7 @@
             </button>
 
             <ul class="nav navbar-nav navbar-left navbar-top-links">
-                <li><a href="@Url.Action("Index", "Product")"><i class="fa fa-home fa-fw"></i> Website</a></li>
+                <li><a asp-area="" asp-controller="Product" asp-action="Index"><i class="fa fa-home fa-fw"></i> Website</a></li>
             </ul>
 
             <ul class="nav navbar-right navbar-top-links">
@@ -124,7 +124,7 @@
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="@Url.Action("Index", "Product")"><i class="fa fa-sign-out fa-fw"></i> Back to Site</a>
+                            <a asp-area="" asp-controller="Product" asp-action="Index"><i class="fa fa-sign-out fa-fw"></i> Back to Site</a>
                         </li>
                     </ul>
                 </li>
@@ -146,8 +146,18 @@
                         </div>
                     </li>
                     <li>
-                        <a href="@Url.Action("Index", "Admin")" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">
+                        <a href="@Url.Action("Index", "Admin")" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">
                             <i class="fa fa-dashboard fa-fw"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Category" ? "active" : "")">
+                        <a asp-area="Admin" asp-controller="Category" asp-action="Index">
+                            <i class="fa fa-tags fa-fw"></i> Categories
+                        </a>
+                    </li>
+                    <li class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Product" ? "active" : "")">
+                        <a asp-area="Admin" asp-controller="Product" asp-action="Index">
+                            <i class="fa fa-cube fa-fw"></i> Products
                         </a>
                     </li>
                     <li>
